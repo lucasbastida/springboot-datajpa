@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaft.org">
+<head>
+<meta charset="ISO-8859-1">
+<title th:text="${title}">Insert title here</title>
+</head>
+<body>
+	<h1 th:text=${title}></h1>
+
+	<table>
+		<thead>
+			<tr>
+				<th>id</th>
+				<th>name</th>
+				<th>surname</th>
+				<th>email</th>
+				<th>date</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="client: ${clients}">
+				<td th:text="${client.id}"></td>
+				<td th:text="${client.name}"></td>
+				<td th:text="${client.surname}"></td>
+				<td th:text="${client.email}"></td>
+				<td th:text="${client.createdAt}"></td>
+			</tr>
+		</tbody>
+	</table>
+
+</body>
+</html>
