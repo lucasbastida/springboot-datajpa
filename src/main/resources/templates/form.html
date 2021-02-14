@@ -39,7 +39,8 @@
 				<label for="inputname" class="col-sm-2 col-form-label">Name</label>
 				<div class="col-sm-6">
 					<input type="text" th:field="*{name}" class="form-control"
-						id="inputname" />
+						id="inputname" aria-describedby="validationServerUsernameFeedback" th:errorclass="is-invalid"/>
+						<small id="validationServerUsernameFeedback" class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
 				</div>
 			</div>
 
@@ -47,7 +48,8 @@
 				<label for="inputsur" class="col-sm-2 col-form-label">Surname</label>
 				<div class="col-sm-6">
 					<input type="text" th:field="*{surname}" class="form-control"
-						id="inputsur" />
+						id="inputsur" th:errorclass="is-invalid" aria-describedby="validationServerSurnameFeedback"/>
+						<small id="validationServerSurnameFeedback" class="invalid-feedback" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></small>
 				</div>
 			</div>
 
@@ -55,13 +57,21 @@
 				<label for="inputemail" class="col-sm-2 col-form-label">Email</label>
 				<div class="col-sm-6">
 					<input type="email" th:field="*{email}" class="form-control"
-						id="inputemail" />
+						id="inputemail" th:errorclass="is-invalid" aria-describedby="validationServerEmailFeedback"/>
+						<small id="validationServerEmailFeedback" class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
 				</div>
 			</div>
-
+			
+			<div class="row mb-3">
+				<label for="inputdate" class="col-sm-2 col-form-label">Date</label>
+				<div class="col-sm-6">
+					<input type="text" th:field="*{createdAt}" class="form-control"
+						id="inputdate" th:errorclass="is-invalid" aria-describedby="validationServerDateFeedback"/>
+						<small id="validationServerDateFeedback" class="invalid-feedback" th:if="${#fields.hasErrors('createdAt')}" th:errors="*{createdAt}"></small>
+				</div>
+			</div>
+			
 			<button type="submit" class="btn btn-primary">Submit</button>
-
-			<!-- 			<input type="hidden" th:field="*{id}" /> -->
 		</form>
 	</div>
 
