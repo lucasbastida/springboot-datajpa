@@ -14,7 +14,7 @@
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="#">Spring Boot</a>
+			<a class="navbar-brand" th:href="@{/}">Spring Boot</a>
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="collapse" data-bs-target="#navbarNav"
 				aria-controls="navbarNav" aria-expanded="false"
@@ -39,8 +39,8 @@
 			<a class="btn btn-success" th:href="@{/form}">Create Client</a>
 		</p>
 		<div class="table-responsive">
-			<table class="table table-borderless table-dark table-hover">
-				<thead>
+			<table class="table table-hover">
+				<thead class="table-dark">
 					<tr>
 						<th>id</th>
 						<th>name</th>

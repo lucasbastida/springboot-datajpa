@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.springboot.app.models.dao.ClientDAO;
 import com.springboot.app.models.entity.Client;
+import com.springboot.app.models.service.ClientService;
 
 @Controller
 @SessionAttributes("client")
 public class ClientController {
 
 	@Autowired
-	private ClientDAO clientDao;
+	private ClientService clientService;
 
 	@GetMapping("/")
 	public String getIndex() {
@@ -34,7 +34,7 @@ public class ClientController {
 	@GetMapping("/list")
 	public String list(Model model) {
 		model.addAttribute("title", "Client list");
-		model.addAttribute("clients", clientDao.findAll());
+		model.addAttribute("clients", clientService.findAll());
 		return "list";
 	}
 
@@ -56,7 +56,7 @@ public class ClientController {
 			return "form";
 		}
 
-		clientDao.save(client);
+		clientService.save(client);
 		status.setComplete();
 		return "redirect:list";
 	}
@@ -64,7 +64,7 @@ public class ClientController {
 	@GetMapping("/form/{id}")
 	public String edit(@PathVariable("id") Long id, Model model) {
 
-		Client client = clientDao.find(id);
+		Client client = clientService.find(id);
 
 		if (!Objects.isNull(client)) {
 			model.addAttribute("client", client);
@@ -78,10 +78,10 @@ public class ClientController {
 	@GetMapping("/delete/{id}")
 	public String delete(@PathVariable("id") Long id) {
 
-		Client client = clientDao.find(id);
+		Client client = clientService.find(id);
 
 		if (!Objects.isNull(client)) {
-			clientDao.delete(id);
+			clientService.delete(id);
 		}
 
 		return "redirect:/list";
