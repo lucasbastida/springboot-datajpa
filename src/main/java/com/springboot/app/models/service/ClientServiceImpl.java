@@ -1,7 +1,5 @@
 package com.springboot.app.models.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +15,7 @@ public class ClientServiceImpl implements ClientService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public List<Client> findAll() {
+	public Iterable<Client> findAll() {
 		return clientDao.findAll();
 	}
 
@@ -30,14 +28,13 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	@Transactional(readOnly = true)
 	public Client find(Long id) {
-		return clientDao.find(id);
+		return clientDao.findById(id).orElse(null);
 	}
 
 	@Override
 	@Transactional
 	public void delete(Long id) {
-		clientDao.delete(id);
-		
+		clientDao.deleteById(id);
 	}
 
 }
