@@ -40,9 +40,20 @@
 					</table>
 				</div>
 
-				<h4 class="card-title">
-					<a class="btn btn-primary" th:href="@{/form}">Create Client</a>
-				</h4>
+				<div class="d-flex justify-content-between flex-row-reverse flex-wrap">
+				
+
+						<nav th:replace="layouts/paginator-nav :: paginator"></nav>
+
+					
+
+						<h4 class="card-title">
+							<a class="btn btn-primary" th:href="@{/form}">Create Client</a>
+						</h4>
+
+					
+				</div>
+
 			</div>
 		</div>
 	</div>

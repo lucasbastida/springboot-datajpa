@@ -6,6 +6,9 @@ import java.util.Objects;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,12 +16,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springboot.app.models.entity.Client;
 import com.springboot.app.models.service.ClientService;
+import com.springboot.app.util.paginator.PageRender;
 
 @Controller
 @SessionAttributes("client")
@@ -33,9 +38,16 @@ public class ClientController {
 	}
 
 	@GetMapping("/list")
-	public String list(Model model) {
+	public String list(@RequestParam(defaultValue = "0") int page, Model model) {
+		
+		Pageable pageable = PageRequest.of(page, 5);
+		Page<Client> clients = clientService.findAll(pageable);
+		
+		PageRender<Client> pageRender = new PageRender<>("/list", clients);
+		
 		model.addAttribute("title", "Client list");
-		model.addAttribute("clients", clientService.findAll());
+		model.addAttribute("clients", clients);
+		model.addAttribute("page", pageRender);
 		return "list";
 	}
 
