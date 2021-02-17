@@ -1,5 +1,9 @@
 package com.springboot.app.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Objects;
 
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springboot.app.models.entity.Client;
@@ -39,12 +44,12 @@ public class ClientController {
 
 	@GetMapping("/list")
 	public String list(@RequestParam(defaultValue = "0") int page, Model model) {
-		
+
 		Pageable pageable = PageRequest.of(page, 5);
 		Page<Client> clients = clientService.findAll(pageable);
-		
+
 		PageRender<Client> pageRender = new PageRender<>("/list", clients);
-		
+
 		model.addAttribute("title", "Client list");
 		model.addAttribute("clients", clients);
 		model.addAttribute("page", pageRender);
@@ -62,14 +67,30 @@ public class ClientController {
 
 	@PostMapping("/form")
 	public String save(@Valid @ModelAttribute("client") Client client, BindingResult result, Model model,
-			RedirectAttributes flash, SessionStatus status) {
+			@RequestParam("file") MultipartFile photo, RedirectAttributes flash, SessionStatus status) {
 
 		if (result.hasErrors()) {
 			model.addAttribute("title", "Client form");
 			return "form";
 		}
-		
-		String message = (client.getId() != null)? "Client edited successfully!" : "Client created successfully!";
+
+		if (!photo.isEmpty()) {
+			Path photoDir = Paths.get("src//main//resources/static/uploads");
+			String rootPath = photoDir.toFile().getAbsolutePath();
+			try {
+				byte[] bytes = photo.getBytes();
+				Path path = Paths.get(rootPath + "//" + photo.getOriginalFilename());
+				Files.write(path, bytes);
+
+				flash.addFlashAttribute("info", "Uploaded " + photo.getOriginalFilename() + " successfully!");
+				
+				client.setPhoto(photo.getOriginalFilename());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		String message = (client.getId() != null) ? "Client edited successfully!" : "Client created successfully!";
 
 		clientService.save(client);
 		status.setComplete();

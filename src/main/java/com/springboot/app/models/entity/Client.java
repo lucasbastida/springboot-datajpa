@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -37,6 +36,8 @@ public class Client implements Serializable {
 	@NotEmpty
 	@Email
 	private String email;
+	
+	private String photo;
 
 	@NotNull
 	@Column(name = "create_at")
@@ -87,6 +88,14 @@ public class Client implements Serializable {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 	public static long getSerialversionuid() {
