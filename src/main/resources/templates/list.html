@@ -1,76 +1,53 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
-	crossorigin="anonymous">
-<meta charset="ISO-8859-1">
-<title th:text="${title}">Insert title here</title>
-</head>
+<head th:replace="layouts/layout :: head"></head>
 <body>
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<div class="container-fluid">
-			<a class="navbar-brand" th:href="@{/}">Spring Boot</a>
-			<button class="navbar-toggler" type="button"
-				data-bs-toggle="collapse" data-bs-target="#navbarNav"
-				aria-controls="navbarNav" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav">
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" th:href="@{/}">Home</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/list}">Clients</a>
-					</li>
-				</ul>
+	<header th:replace="layouts/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text=${title}></div>
+			<div class="card-body">
+
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead class="table-dark">
+							<tr>
+								<th>id</th>
+								<th>name</th>
+								<th>surname</th>
+								<th>email</th>
+								<th>date</th>
+								<th>Edit</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="client: ${clients}">
+								<td th:text="${client.id}"></td>
+								<td th:text="${client.name}"></td>
+								<td th:text="${client.surname}"></td>
+								<td th:text="${client.email}"></td>
+								<td th:text="${client.createdAt}"></td>
+								<td><a th:href="@{/form/} + ${client.id}" th:text="Edit"
+									class="btn btn-primary btn-sm d-grid"></a></td>
+								<td><a th:href="@{/delete/} + ${client.id}"
+									th:text="Delete" class="btn btn-danger btn-sm d-grid"
+									onclick="return confirm('Are you sure?');"></a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h4 class="card-title">
+					<a class="btn btn-primary" th:href="@{/form}">Create Client</a>
+				</h4>
 			</div>
 		</div>
-	</nav>
-
-	<div class="container">
-		<h1 class="text" th:text=${title}></h1>
-
-		<p>
-			<a class="btn btn-success" th:href="@{/form}">Create Client</a>
-		</p>
-		<div class="table-responsive">
-			<table class="table table-hover">
-				<thead class="table-dark">
-					<tr>
-						<th>id</th>
-						<th>name</th>
-						<th>surname</th>
-						<th>email</th>
-						<th>date</th>
-						<th>Edit</th>
-						<th>Delete</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="client: ${clients}">
-						<td th:text="${client.id}"></td>
-						<td th:text="${client.name}"></td>
-						<td th:text="${client.surname}"></td>
-						<td th:text="${client.email}"></td>
-						<td th:text="${client.createdAt}"></td>
-						<td><a th:href="@{/form/} + ${client.id}" th:text="Edit"
-							class="btn btn-primary btn-sm d-grid"></a></td>
-						<td><a th:href="@{/delete/} + ${client.id}" th:text="Delete"
-							class="btn btn-danger btn-sm d-grid" onclick="return confirm('Are you sure?');"></a></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
 	</div>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-		crossorigin="anonymous"></script>
+
+	<footer th:replace="layouts/layout :: footer"></footer>
 
 </body>
 </html>

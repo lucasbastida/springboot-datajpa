@@ -1,101 +1,77 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
-	crossorigin="anonymous">
-<meta charset="ISO-8859-1">
-<title th:text="${title}">Insert title here</title>
-</head>
+<head th:replace="layouts/layout :: head"></head>
 <body>
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<div class="container-fluid">
-			<a class="navbar-brand" th:href="@{/}">Spring Boot</a>
-			<button class="navbar-toggler" type="button"
-				data-bs-toggle="collapse" data-bs-target="#navbarNav"
-				aria-controls="navbarNav" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav">
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" th:href="@{/}">Home</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/list}">Clients</a>
-					</li>
-				</ul>
+	<header th:replace="layouts/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text=${title}></div>
+			<div class="card-body">
+
+				<div th:object="${client}" th:remove="tag">
+					<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+						<ul class="mb-0">
+							<li th:each="e: ${#fields.errors('*')}" th:text="${e}">
+						</ul>
+					</div>
+				</div>
+
+				<form th:action="@{/form}" method="post" th:object="${client}">
+					<div class="row mb-3">
+						<label for="inputname" class="col-sm-2 col-form-label">Name</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{name}" class="form-control"
+								id="inputname"
+								aria-describedby="validationServerUsernameFeedback"
+								th:errorclass="is-invalid" /> <small
+								id="validationServerUsernameFeedback" class="invalid-feedback"
+								th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+						</div>
+					</div>
+
+					<div class="row mb-3">
+						<label for="inputsur" class="col-sm-2 col-form-label">Surname</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{surname}" class="form-control"
+								id="inputsur" th:errorclass="is-invalid"
+								aria-describedby="validationServerSurnameFeedback" /> <small
+								id="validationServerSurnameFeedback" class="invalid-feedback"
+								th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></small>
+						</div>
+					</div>
+
+					<div class="row mb-3">
+						<label for="inputemail" class="col-sm-2 col-form-label">Email</label>
+						<div class="col-sm-6">
+							<input type="email" th:field="*{email}" class="form-control"
+								id="inputemail" th:errorclass="is-invalid"
+								aria-describedby="validationServerEmailFeedback" /> <small
+								id="validationServerEmailFeedback" class="invalid-feedback"
+								th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+						</div>
+					</div>
+
+					<div class="row mb-3">
+						<label for="inputdate" class="col-sm-2 col-form-label">Date</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{createdAt}" class="form-control"
+								id="inputdate" th:errorclass="is-invalid"
+								aria-describedby="validationServerDateFeedback" /> <small
+								id="validationServerDateFeedback" class="invalid-feedback"
+								th:if="${#fields.hasErrors('createdAt')}"
+								th:errors="*{createdAt}"></small>
+						</div>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</form>
+
 			</div>
 		</div>
-	</nav>
-
-	<div class="container">
-		<h1 th:text="${title}"></h1>
-
-		<div th:object="${client}" th:remove="tag">
-			<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-				<ul class="mb-0">
-					<li th:each="e: ${#fields.errors('*')}" th:text="${e}">
-				</ul>
-			</div>
-		</div>
-
-		<form th:action="@{/form}" method="post" th:object="${client}">
-			<div class="row mb-3">
-				<label for="inputname" class="col-sm-2 col-form-label">Name</label>
-				<div class="col-sm-6">
-					<input type="text" th:field="*{name}" class="form-control"
-						id="inputname" aria-describedby="validationServerUsernameFeedback"
-						th:errorclass="is-invalid" /> <small
-						id="validationServerUsernameFeedback" class="invalid-feedback"
-						th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
-				</div>
-			</div>
-
-			<div class="row mb-3">
-				<label for="inputsur" class="col-sm-2 col-form-label">Surname</label>
-				<div class="col-sm-6">
-					<input type="text" th:field="*{surname}" class="form-control"
-						id="inputsur" th:errorclass="is-invalid"
-						aria-describedby="validationServerSurnameFeedback" /> <small
-						id="validationServerSurnameFeedback" class="invalid-feedback"
-						th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></small>
-				</div>
-			</div>
-
-			<div class="row mb-3">
-				<label for="inputemail" class="col-sm-2 col-form-label">Email</label>
-				<div class="col-sm-6">
-					<input type="email" th:field="*{email}" class="form-control"
-						id="inputemail" th:errorclass="is-invalid"
-						aria-describedby="validationServerEmailFeedback" /> <small
-						id="validationServerEmailFeedback" class="invalid-feedback"
-						th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
-				</div>
-			</div>
-
-			<div class="row mb-3">
-				<label for="inputdate" class="col-sm-2 col-form-label">Date</label>
-				<div class="col-sm-6">
-					<input type="text" th:field="*{createdAt}" class="form-control"
-						id="inputdate" th:errorclass="is-invalid"
-						aria-describedby="validationServerDateFeedback" /> <small
-						id="validationServerDateFeedback" class="invalid-feedback"
-						th:if="${#fields.hasErrors('createdAt')}" th:errors="*{createdAt}"></small>
-				</div>
-			</div>
-
-			<button type="submit" class="btn btn-primary">Submit</button>
-		</form>
-
-
 	</div>
 
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-		crossorigin="anonymous"></script>
+	<footer th:replace="layouts/layout :: footer"></footer>
 </body>
 </html>

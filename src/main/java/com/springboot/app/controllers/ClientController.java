@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springboot.app.models.entity.Client;
 import com.springboot.app.models.service.ClientService;
@@ -49,20 +50,23 @@ public class ClientController {
 
 	@PostMapping("/form")
 	public String save(@Valid @ModelAttribute("client") Client client, BindingResult result, Model model,
-			SessionStatus status) {
+			RedirectAttributes flash, SessionStatus status) {
 
 		if (result.hasErrors()) {
 			model.addAttribute("title", "Client form");
 			return "form";
 		}
+		
+		String message = (client.getId() != null)? "Client edited successfully!" : "Client created successfully!";
 
 		clientService.save(client);
 		status.setComplete();
+		flash.addFlashAttribute("success", message);
 		return "redirect:list";
 	}
 
 	@GetMapping("/form/{id}")
-	public String edit(@PathVariable("id") Long id, Model model) {
+	public String edit(@PathVariable("id") Long id, Model model, RedirectAttributes flash) {
 
 		Client client = clientService.find(id);
 
@@ -70,18 +74,22 @@ public class ClientController {
 			model.addAttribute("client", client);
 			System.out.println(client.getId());
 			model.addAttribute("title", "Edit client");
+		} else {
+			flash.addFlashAttribute("error", "Cant edit client.");
+			return "redirect:/list";
 		}
 
 		return "form";
 	}
 
 	@GetMapping("/delete/{id}")
-	public String delete(@PathVariable("id") Long id) {
+	public String delete(@PathVariable("id") Long id, RedirectAttributes flash) {
 
 		Client client = clientService.find(id);
 
 		if (!Objects.isNull(client)) {
 			clientService.delete(id);
+			flash.addFlashAttribute("success", "Client deleted successfully!");
 		}
 
 		return "redirect:/list";
