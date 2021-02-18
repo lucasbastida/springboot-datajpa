@@ -31,7 +31,7 @@ import com.springboot.app.models.service.ClientService;
 import com.springboot.app.util.paginator.PageRender;
 
 @Controller
-@SessionAttributes("client")
+@SessionAttributes("client") 
 public class ClientController {
 
 	@Autowired
@@ -40,6 +40,23 @@ public class ClientController {
 	@GetMapping("/")
 	public String getIndex() {
 		return "redirect:list";
+	}
+
+	@GetMapping("/view/{id}")
+	public String clientInfo(@PathVariable Long id, Model model, RedirectAttributes flash) {
+
+		Client client = clientService.find(id);
+
+		if (client == null) {
+			flash.addFlashAttribute("error", "The client id " + id + " doesnt exist in the database");
+			return "redirect:/list";
+		}
+		
+		model.addAttribute("client", client);
+		model.addAttribute("title", client.getName() + " details:");
+		
+		return "clientinfo";
+
 	}
 
 	@GetMapping("/list")
@@ -83,7 +100,7 @@ public class ClientController {
 				Files.write(path, bytes);
 
 				flash.addFlashAttribute("info", "Uploaded " + photo.getOriginalFilename() + " successfully!");
-				
+
 				client.setPhoto(photo.getOriginalFilename());
 			} catch (IOException e) {
 				e.printStackTrace();
