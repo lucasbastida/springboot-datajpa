@@ -1,4 +1,3 @@
-src/main/resources/static/uploads/
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
