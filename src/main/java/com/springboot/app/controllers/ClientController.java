@@ -53,7 +53,7 @@ public class ClientController {
 		}
 		
 		model.addAttribute("client", client);
-		model.addAttribute("title", client.getName() + " details:");
+		model.addAttribute("title", client.getName() + "'s details");
 		
 		return "clientinfo";
 
@@ -92,8 +92,7 @@ public class ClientController {
 		}
 
 		if (!photo.isEmpty()) {
-			Path photoDir = Paths.get("src//main//resources/static/uploads");
-			String rootPath = photoDir.toFile().getAbsolutePath();
+			String rootPath = System.getProperty("user.dir") + "/uploads/";
 			try {
 				byte[] bytes = photo.getBytes();
 				Path path = Paths.get(rootPath + "//" + photo.getOriginalFilename());

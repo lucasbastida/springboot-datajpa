@@ -10,7 +10,7 @@
 			<div class="card-header" th:text=${title}></div>
 			<div class="card-body">
 
-				<img th:if="${#strings.length(client.photo) > 0}" class="img-thumbnail rounded float-start" style="max-width: 25%" th:alt="${client.photo}"
+				<img th:if="${#strings.length(client.photo)} > 0" class="img-thumbnail rounded float-start" style="max-width: 25%" th:alt="${client.photo}"
 					th:src="@{/uploads/} + ${client.photo}">
 
 				<ul class="list-group">
