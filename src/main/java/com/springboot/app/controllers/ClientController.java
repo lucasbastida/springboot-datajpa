@@ -1,14 +1,12 @@
 package com.springboot.app.controllers;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Objects;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,20 +26,46 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springboot.app.models.entity.Client;
 import com.springboot.app.models.service.ClientService;
+import com.springboot.app.models.service.UploadFileService;
 import com.springboot.app.util.paginator.PageRender;
 
 @Controller
-@SessionAttributes("client") 
+@SessionAttributes("client")
 public class ClientController {
 
+	private final Logger log = org.slf4j.LoggerFactory.getLogger(getClass());
+	
 	@Autowired
 	private ClientService clientService;
+	
+	@Autowired
+	private UploadFileService photoService;
 
 	@GetMapping("/")
 	public String getIndex() {
 		return "redirect:list";
 	}
 
+	// with .+ spring wont truncate the file extension
+	/*
+	 * @GetMapping("/uploads/{filename:.+}") public ResponseEntity<Resource>
+	 * viePhoto(@PathVariable String filename){ Path photoPath =
+	 * Paths.get("uploads").resolve(filename).toAbsolutePath();
+	 * 
+	 * log.info("photoPath: " + photoPath);
+	 * 
+	 * Resource resource = null; try { resource = new
+	 * UrlResource(photoPath.toUri()); if (!resource.exists() ||
+	 * !resource.isReadable()) { throw new
+	 * RuntimeException("Error: cant load photo " + photoPath); } } catch (Exception
+	 * e) { e.printStackTrace(); }
+	 * 
+	 * return ResponseEntity.ok() .header(HttpHeaders.CONTENT_DISPOSITION,
+	 * "attachment; filename=\"" + resource.getFilename() + "\"") .body(resource);
+	 * 
+	 * }
+	 */
+	
 	@GetMapping("/view/{id}")
 	public String clientInfo(@PathVariable Long id, Model model, RedirectAttributes flash) {
 
@@ -53,8 +77,9 @@ public class ClientController {
 		}
 		
 		model.addAttribute("client", client);
+		log.info(client.getPhoto());
 		model.addAttribute("title", client.getName() + "'s details");
-		
+
 		return "clientinfo";
 
 	}
@@ -90,17 +115,17 @@ public class ClientController {
 			model.addAttribute("title", "Client form");
 			return "form";
 		}
+		
+		
+		
+		if (clientService.find(client.getId()) != null && !client.getPhoto().isEmpty()) {
+			photoService.delete(client.getPhoto());
+		}
 
 		if (!photo.isEmpty()) {
-			String rootPath = System.getProperty("user.dir") + "/uploads/";
 			try {
-				byte[] bytes = photo.getBytes();
-				Path path = Paths.get(rootPath + "//" + photo.getOriginalFilename());
-				Files.write(path, bytes);
-
+				client.setPhoto(photoService.copy(photo));
 				flash.addFlashAttribute("info", "Uploaded " + photo.getOriginalFilename() + " successfully!");
-
-				client.setPhoto(photo.getOriginalFilename());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -123,6 +148,8 @@ public class ClientController {
 			model.addAttribute("client", client);
 			System.out.println(client.getId());
 			model.addAttribute("title", "Edit client");
+		
+			
 		} else {
 			flash.addFlashAttribute("error", "Cant edit client.");
 			return "redirect:/list";
@@ -138,7 +165,9 @@ public class ClientController {
 
 		if (!Objects.isNull(client)) {
 			clientService.delete(id);
+			photoService.delete(client.getPhoto());
 			flash.addFlashAttribute("success", "Client deleted successfully!");
+			
 		}
 
 		return "redirect:/list";
