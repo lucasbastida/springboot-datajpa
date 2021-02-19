@@ -1,4 +1,4 @@
-INSERT INTO `clients` (`name`,`surname`,`email`,`create_at`,`photo`) VALUES ('Susan','Sargent','egestas.a@sit.com','2021-09-14','strongdoge.jpg');
+INSERT INTO `clients` (`name`,`surname`,`email`,`create_at`,`photo`) VALUES ('Susan','Sargent','egestas.a@sit.com','2021-09-14','');
 INSERT INTO `clients` (`name`,`surname`,`email`,`create_at`,`photo`) VALUES ('Grady','Garza','rhoncus@ametfaucibus.org','2021-03-01','');
 INSERT INTO `clients` (`name`,`surname`,`email`,`create_at`,`photo`) VALUES ('Aubrey','Mccall','aliquam@vel.edu','2020-03-20','');
 INSERT INTO `clients` (`name`,`surname`,`email`,`create_at`,`photo`) VALUES ('Joshua','Baird','malesuada.ut.sem@tincidunttempus.org','2020-06-17','');
