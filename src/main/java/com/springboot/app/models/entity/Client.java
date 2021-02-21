@@ -1,13 +1,18 @@
 package com.springboot.app.models.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,14 +34,14 @@ public class Client implements Serializable {
 
 	@NotEmpty
 	private String name;
-	
+
 	@NotEmpty
 	private String surname;
-	
+
 	@NotEmpty
 	@Email
 	private String email;
-	
+
 	private String photo;
 
 	@NotNull
@@ -44,11 +49,18 @@ public class Client implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client", orphanRemoval = true	)
+	private List<Invoice> invoices;
 	
 //	@PrePersist
 //	public void prePersist() {
 //		createdAt = new Date();
 //	}
+
+	public Client() {
+		invoices = new ArrayList<>();
+	}
 
 	public Long getId() {
 		return id;
@@ -101,4 +113,17 @@ public class Client implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	public List<Invoice> getInvoices() {
+		return invoices;
+	}
+
+	public void setInvoices(List<Invoice> invoices) {
+		this.invoices = invoices;
+	}
+	
+	public void addInvoice(Invoice invoice) {
+		invoices.add(invoice);
+	}
+
 }
