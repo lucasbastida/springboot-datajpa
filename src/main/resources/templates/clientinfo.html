@@ -10,11 +10,12 @@
 			<div class="card-header" th:text=${title}></div>
 			<div class="card-body">
 
+
 				<img th:if="${#strings.length(client.photo)} > 0"
 					class="img-thumbnail rounded float-start" style="max-width: 25%"
-					th:alt="${client.photo}" th:src="@{/uploads/} + ${client.photo}">
+					th:alt="${client.photo}" th:src="@{/uploads/} + ${client.photo}" />
 
-				<ul class="list-group">
+				<ul class="list-group mb-4">
 					<li class="list-group-item" th:text="${client.name}"></li>
 					<li class="list-group-item" th:text="${client.surname}"></li>
 					<li class="list-group-item" th:text="${client.email}"></li>
@@ -22,8 +23,11 @@
 				</ul>
 
 				<div th:if="${#lists.isEmpty(client.invoices)}"
-					class="alert alert-info my-4"
+					class="alert alert-info mb-4"
 					th:text="'No invoices exist for ' + ${client.name}"></div>
+
+				<a th:href="@{/invoice/form/} + ${client.id}"
+					class="btn btn-primary" th:text="'Create invoice'"></a> 
 
 				<table th:if="${not #lists.isEmpty(client.invoices)}"
 					class="table table-bordered table-striped my-4">

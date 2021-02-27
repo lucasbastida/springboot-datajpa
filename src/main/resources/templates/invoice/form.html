@@ -9,14 +9,95 @@
 		<div class="card bg-light">
 			<div class="card-header" th:text=${title}></div>
 			<div class="card-body">
-			
+
+				<h4>
+					<a th:href="@{/view/} + ${invoice.client.id}"
+						class="btn btn-light btn-sm"
+						th:text="'&laquo; return client details'"></a>
+				</h4>
+
+
+				<form th:action="@{/invoice/form}" th:object="${invoice}"
+					method="post">
+
+					<div class="row mb-3">
+						<label class="col-sm-2 col-form-label">Client</label>
+						<div class="col-sm-6">
+							<input type="text"
+								th:value="${invoice.client.name} + ' ' + ${invoice.client.surname}"
+								class="form-control" disabled />
+						</div>
+					</div>
+
+					<div class="row mb-3">
+						<label for="inputDesc" class="col-sm-2 col-form-label">Description</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{description}" class="form-control"
+								id="inputname"
+								aria-describedby="validationServerDescriptionFeedback"
+								th:errorclass="is-invalid" /> <small
+								id="validationServerUsernameFeedback" class="invalid-feedback"
+								th:if="${#fields.hasErrors('description')}"
+								th:errors="*{description}"></small>
+						</div>
+					</div>
+
+					<div class="row mb-3">
+						<label for="inputObservations" class="col-sm-2 col-form-label">Observations</label>
+						<div class="col-sm-6">
+							<textarea th:field="*{observation}" class="form-control"
+								id="inputObservations"></textarea>
+						</div>
+					</div>
+
+
+					<div class="row mb-3">
+						<label for="search_product" class="col-sm-2 col-form-label">Search
+							products</label>
+						<div class="col-sm-6">
+							<input name="search_product" id="search_product"
+								class="form-control">
+							</textarea>
+						</div>
+					</div>
+
+					<table th:replace="invoice/form-items :: invoiceItems"></table>
+
+					<div class="table-responsive">
+						<table id="loadItemProducts"
+							class="table table-sm table-striped table-hover">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Price</th>
+									<th width="15%">Amount</th>
+									<th>Total</th>
+									<th>Delete</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+
+						</table>
+					</div>
+
+					<h5>
+						Total <span class="badge bg-secondary" id="invoice_total">0</span>
+					</h5>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<button type="submit" class="btn btn-primary" th:text="${title}">submit</button>
+						</div>
+					</div>
+				</form>
+
+
 			</div>
-			
-			
 		</div>
 	</div>
 
 	<footer th:replace="layouts/layout :: footer"></footer>
 
+	<script th:replace="invoice/js/autocomplete-product :: javascript"></script>
 </body>
 </html>
