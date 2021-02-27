@@ -27,30 +27,38 @@
 					th:text="'No invoices exist for ' + ${client.name}"></div>
 
 				<a th:href="@{/invoice/form/} + ${client.id}"
-					class="btn btn-primary" th:text="'Create invoice'"></a> 
+					class="btn btn-primary" th:text="'Create invoice'"></a>
 
-				<table th:if="${not #lists.isEmpty(client.invoices)}"
-					class="table table-bordered table-striped my-4">
-					<thead>
-						<tr class="table-dark">
-							<th>id</th>
-							<th>description</th>
-							<th>date</th>
-							<th>total</th>
-						</tr>
-					</thead>
+				<div class="table-responsive">
+					<table th:if="${not #lists.isEmpty(client.invoices)}"
+						class="table table-bordered table-striped my-4">
+						<thead>
+							<tr class="table-dark">
+								<th>id</th>
+								<th>description</th>
+								<th>date</th>
+								<th>total</th>
+								<th>view</th>
+								<th class="text-center">delete</th>
+							</tr>
+						</thead>
 
-					<tbody>
-						<tr th:each="invoice : ${client.invoices}">
-							<td th:text="${invoice.id}"></td>
-							<td th:text="${invoice.description}"></td>
-							<td th:text="${invoice.createdAt}"></td>
-							<td th:text="${invoice.total}"></td>
-						</tr>
-					</tbody>
+						<tbody>
+							<tr th:each="invoice : ${client.invoices}">
+								<td th:text="${invoice.id}"></td>
+								<td th:text="${invoice.description}"></td>
+								<td th:text="${invoice.createdAt}"></td>
+								<td th:text="${invoice.total}"></td>
+								<td><a th:href="@{'/invoice/view/' + ${invoice.id}}"
+									th:text="details" class="btn btn-sm btn-primary"></a></td>
+								<td class="text-center"><a th:href="@{'/invoice/delete/' + ${invoice.id}}" class="btn btn-danger btn-sm"
+									onclick="return confirm('Are you sure?');"><i
+										class="bi bi-trash"></i></a></td>
+							</tr>
+						</tbody>
 
-				</table>
-
+					</table>
+				</div>
 
 			</div>
 		</div>

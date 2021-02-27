@@ -27,5 +27,7 @@ public interface ClientService {
 
 	void saveInvoice(Invoice invoice);
 	
+	Invoice findInvoiceById(Long id);
 	
+	void deleteInvoice(Long id);
 }

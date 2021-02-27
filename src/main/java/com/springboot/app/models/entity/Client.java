@@ -50,9 +50,9 @@ public class Client implements Serializable {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client", orphanRemoval = true	)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client", orphanRemoval = true)
 	private List<Invoice> invoices;
-	
+
 //	@PrePersist
 //	public void prePersist() {
 //		createdAt = new Date();
@@ -121,9 +121,14 @@ public class Client implements Serializable {
 	public void setInvoices(List<Invoice> invoices) {
 		this.invoices = invoices;
 	}
-	
+
 	public void addInvoice(Invoice invoice) {
 		invoices.add(invoice);
+	}
+
+	@Override
+	public String toString() {
+		return name + " " + surname;
 	}
 
 }

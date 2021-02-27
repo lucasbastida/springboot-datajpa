@@ -21,7 +21,7 @@
 								<th>date</th>
 								<th>invoice</th>
 								<th>Edit</th>
-								<th>Delete</th>
+								<th class="text-center">Delete</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -36,9 +36,10 @@
 									class="btn btn-success btn-sm d-grid" th:text="'New invoice'"></a></td>
 								<td><a th:href="@{/form/} + ${client.id}" th:text="Edit"
 									class="btn btn-primary btn-sm d-grid"></a></td>
-								<td><a th:href="@{/delete/} + ${client.id}"
-									th:text="Delete" class="btn btn-danger btn-sm d-grid"
-									onclick="return confirm('Are you sure?');"></a></td>
+								<td class="text-center"><a th:href="@{/delete/} + ${client.id}"
+									class="btn btn-danger btn-sm"
+									onclick="return confirm('Are you sure?');"><i
+										class="bi bi-trash"></i></a></td>
 							</tr>
 						</tbody>
 					</table>

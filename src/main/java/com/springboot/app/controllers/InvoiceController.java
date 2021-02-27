@@ -32,6 +32,37 @@ public class InvoiceController {
 
 	@Autowired
 	private ClientService clientService;
+	
+	@GetMapping("/delete/{id}")
+	public String delete(@PathVariable Long id, RedirectAttributes flash) {
+		Invoice invoice = clientService.findInvoiceById(id);
+		
+		if (invoice != null) {
+			clientService.deleteInvoice(id);
+			flash.addFlashAttribute("success", "Invoice deleted.");
+			return "redirect:/view/" + invoice.getClient().getId();
+		}
+		
+		flash.addFlashAttribute("error", "Could not delete invoice");
+		return "redirect:/list";
+	}
+	
+	@GetMapping("/view/{id}")
+	public String view(@PathVariable Long id, Model model, RedirectAttributes flash) {
+		
+		Invoice invoice = clientService.findInvoiceById(id);
+		
+		if (invoice == null) {
+			flash.addFlashAttribute("error", "Invoice doesnt exist.");
+			return "redirect:/list";
+		}
+		
+		
+		model.addAttribute("invoice", invoice);
+		model.addAttribute("title", "Invoice: " + invoice.getDescription());
+		
+		return "invoice/view";
+	}
 
 	@GetMapping("/form/{clientId}")
 	public String create(@PathVariable(name = "clientId") Long clientId, Model model, RedirectAttributes flash) {

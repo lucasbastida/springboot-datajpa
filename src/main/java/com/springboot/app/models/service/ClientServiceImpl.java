@@ -75,4 +75,15 @@ public class ClientServiceImpl implements ClientService {
 		return productDao.findById(id).orElse(null);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public Invoice findInvoiceById(Long id) {
+		return invoiceDao.findById(id).orElse(null);
+	}
+
+	@Override
+	public void deleteInvoice(Long id) {
+		invoiceDao.deleteById(id);
+	}
+
 }

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layouts/layout :: head"></head>
+<body>
+
+	<header th:replace="layouts/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text=${title}></div>
+			<div class="card-body">
+
+				<h4 class="card-title">
+					<a th:href="@{'/view/' + ${invoice.client.id}}"
+						class="btn btn-light btn-sm">&laquo; return</a>
+				</h4>
+
+				<ul class="list-group my-2">
+					<li class="list-group-item list-group-item-primary"
+						th:text="'Client info'"></li>
+					<li class="list-group-item" th:text="${invoice.client}"></li>
+					<li class="list-group-item" th:text="${invoice.client.email}"></li>
+				</ul>
+
+				<ul class="list-group my-4">
+					<li class="list-group-item list-group-item-success"
+						th:text="'Invoice details'"></li>
+					<li class="list-group-item"
+						th:text="'Invoice id: ' + ${invoice.id}"></li>
+					<li class="list-group-item"
+						th:text="'Description: ' + ${invoice.description}"></li>
+					<li class="list-group-item"
+						th:text="'Date: ' + ${invoice.createdAt}"></li>
+				</ul>
+
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Product</th>
+								<th>Amount</th>
+								<th>Price</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="item: ${invoice.items}">
+								<td th:text="${item.product.name}"></td>
+								<td th:text="${item.amount}"></td>
+								<td th:text="${item.product.price}"></td>
+								<td th:text="${item.calculatePrice()}"></td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+
+				<div class="d-flex justify-content-end">
+					<h5>
+						Invoice Total: <span class="badge bg-secondary"
+							th:text="${invoice.total}"></span>
+					</h5>
+				</div>
+
+				<div class="card border-info mb-3"
+					style="max-width: 20rem;">
+					<div class="card-header">Observations</div>
+					<div class="card-body">
+						<p class="card-text" th:text="${invoice.observation}" th:if="${not #strings.isEmpty(invoice.observation)}"></p>
+						<h5 class="card-title" th:if="${#strings.isEmpty(invoice.observation)}">None</h5>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="layouts/layout :: footer"></footer>
+</body>
+</html>
