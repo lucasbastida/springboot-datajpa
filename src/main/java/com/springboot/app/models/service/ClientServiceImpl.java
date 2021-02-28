@@ -20,13 +20,13 @@ public class ClientServiceImpl implements ClientService {
 
 	@Autowired
 	private ClientDAO clientDao;
-	
+
 	@Autowired
 	private ProductDao productDao;
-	
+
 	@Autowired
 	private InvoiceDao invoiceDao;
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Iterable<Client> findAll() {
@@ -43,6 +43,12 @@ public class ClientServiceImpl implements ClientService {
 	@Transactional(readOnly = true)
 	public Client find(Long id) {
 		return clientDao.findById(id).orElse(null);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Client fetchByIdWithInvoices(Long id) {
+		return clientDao.fetchByIdWithInvoices(id);
 	}
 
 	@Override
@@ -82,8 +88,15 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteInvoice(Long id) {
 		invoiceDao.deleteById(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Invoice findInvoiceByIdWithClientWithInvoiceItemWithProduct(Long id) {
+		return invoiceDao.fetchByIdWithClientWithInvoiceItemWithProduct(id);
 	}
 
 }

@@ -50,7 +50,7 @@ public class InvoiceController {
 	@GetMapping("/view/{id}")
 	public String view(@PathVariable Long id, Model model, RedirectAttributes flash) {
 		
-		Invoice invoice = clientService.findInvoiceById(id);
+		Invoice invoice = clientService.findInvoiceByIdWithClientWithInvoiceItemWithProduct(id);
 		
 		if (invoice == null) {
 			flash.addFlashAttribute("error", "Invoice doesnt exist.");

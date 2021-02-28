@@ -18,6 +18,8 @@ public interface ClientService {
 	void save(Client client);
 
 	Client find(Long id);
+	
+	Client fetchByIdWithInvoices(Long id);
 
 	void delete(Long id);
 
@@ -30,4 +32,6 @@ public interface ClientService {
 	Invoice findInvoiceById(Long id);
 	
 	void deleteInvoice(Long id);
+	
+	Invoice findInvoiceByIdWithClientWithInvoiceItemWithProduct(Long id);
 }

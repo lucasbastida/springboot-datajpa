@@ -69,7 +69,7 @@ public class ClientController {
 	@GetMapping("/view/{id}")
 	public String clientInfo(@PathVariable Long id, Model model, RedirectAttributes flash) {
 
-		Client client = clientService.find(id);
+		Client client = clientService.fetchByIdWithInvoices(id);
 
 		if (client == null) {
 			flash.addFlashAttribute("error", "The client id " + id + " doesnt exist in the database");
