@@ -41,10 +41,6 @@ public class ClientController {
 	@Autowired
 	private UploadFileService photoService;
 
-	@GetMapping("/")
-	public String getIndex() {
-		return "redirect:list";
-	}
 
 	// with .+ spring wont truncate the file extension
 	/*
@@ -84,7 +80,7 @@ public class ClientController {
 
 	}
 
-	@GetMapping("/list")
+	@GetMapping({"/list","/"})
 	public String list(@RequestParam(defaultValue = "0") int page, Model model) {
 
 		Pageable pageable = PageRequest.of(page, 5);
