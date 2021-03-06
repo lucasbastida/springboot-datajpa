@@ -26,7 +26,7 @@
 					class="alert alert-info mb-4"
 					th:text="'No invoices exist for ' + ${client.name}"></div>
 
-				<a th:href="@{/invoice/form/} + ${client.id}"
+				<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/invoice/form/} + ${client.id}"
 					class="btn btn-primary" th:text="'Create invoice'"></a>
 
 				<div class="table-responsive">
@@ -38,8 +38,8 @@
 								<th>description</th>
 								<th>date</th>
 								<th>total</th>
-								<th>view</th>
-								<th class="text-center">delete</th>
+								<th sec:authorize="hasRole('ROLE_ADMIN')">view</th>
+								<th sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">delete</th>
 							</tr>
 						</thead>
 
@@ -49,9 +49,9 @@
 								<td th:text="${invoice.description}"></td>
 								<td th:text="${invoice.createdAt}"></td>
 								<td th:text="${invoice.total}"></td>
-								<td><a th:href="@{'/invoice/view/' + ${invoice.id}}"
+								<td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{'/invoice/view/' + ${invoice.id}}"
 									th:text="details" class="btn btn-sm btn-primary"></a></td>
-								<td class="text-center"><a th:href="@{'/invoice/delete/' + ${invoice.id}}" class="btn btn-danger btn-sm"
+								<td sec:authorize="hasRole('ROLE_ADMIN')" class="text-center"><a th:href="@{'/invoice/delete/' + ${invoice.id}}" class="btn btn-danger btn-sm"
 									onclick="return confirm('Are you sure?');"><i
 										class="bi bi-trash"></i></a></td>
 							</tr>

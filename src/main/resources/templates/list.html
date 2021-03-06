@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="layouts/layout :: head"></head>
 <body>
 
@@ -14,29 +14,29 @@
 					<table class="table table-hover">
 						<thead class="table-dark">
 							<tr>
-								<th>id</th>
+								<th sec:authorize="hasRole('ROLE_USER')">id</th>
 								<th>name</th>
 								<th>surname</th>
 								<th>email</th>
 								<th>date</th>
-								<th>invoice</th>
-								<th>Edit</th>
-								<th class="text-center">Delete</th>
+								<th sec:authorize="hasRole('ROLE_ADMIN')">invoice</th>
+								<th sec:authorize="hasRole('ROLE_ADMIN')">Edit</th>
+								<th sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">Delete</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="client: ${clients}">
-								<td><a th:href="@{/view/} + ${client.id}"
+								<td sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/view/} + ${client.id}"
 									th:text="${client.id}" class="btn btn-primary btn-sm"></a></td>
 								<td th:text="${client.name}"></td>
 								<td th:text="${client.surname}"></td>
 								<td th:text="${client.email}"></td>
 								<td th:text="${client.createdAt}"></td>
-								<td><a th:href="@{/invoice/form/} + ${client.id}"
+								<td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/invoice/form/} + ${client.id}"
 									class="btn btn-success btn-sm d-grid" th:text="'New invoice'"></a></td>
-								<td><a th:href="@{/form/} + ${client.id}" th:text="Edit"
+								<td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/form/} + ${client.id}" th:text="Edit"
 									class="btn btn-primary btn-sm d-grid"></a></td>
-								<td class="text-center"><a th:href="@{/delete/} + ${client.id}"
+								<td sec:authorize="hasRole('ROLE_ADMIN')" class="text-center"><a th:href="@{/delete/} + ${client.id}"
 									class="btn btn-danger btn-sm"
 									onclick="return confirm('Are you sure?');"><i
 										class="bi bi-trash"></i></a></td>
@@ -54,7 +54,7 @@
 
 
 					<h4 class="card-title">
-						<a class="btn btn-primary" th:href="@{/form}">Create Client</a>
+						<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary" th:href="@{/form}">Create Client</a>
 					</h4>
 
 

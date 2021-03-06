@@ -1,9 +1,11 @@
 package com.springboot.app.controllers;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -11,6 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -62,6 +72,8 @@ public class ClientController {
 	 * }
 	 */
 	
+	@PreAuthorize("hasRole('ROLE_USER')")
+//	@Secured("ROLE_USER")
 	@GetMapping("/view/{id}")
 	public String clientInfo(@PathVariable Long id, Model model, RedirectAttributes flash) {
 
@@ -81,8 +93,19 @@ public class ClientController {
 	}
 
 	@GetMapping({"/list","/"})
-	public String list(@RequestParam(defaultValue = "0") int page, Model model) {
+	public String list(@RequestParam(defaultValue = "0") int page, Model model, HttpServletRequest request) {
 
+		
+		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
+		
+		if (securityContext.isUserInRole("ADMIN")) {
+			log.info(securityContext.getRemoteUser() + " has access to this page.");
+		}
+		//alternative
+		if (request.isUserInRole("ROLE_ADMIN")) {
+			log.info(request.getRemoteUser()+ " has access to this page. (using HttpServletRequest)");
+		}
+		
 		Pageable pageable = PageRequest.of(page, 5);
 		Page<Client> clients = clientService.findAll(pageable);
 
@@ -94,6 +117,7 @@ public class ClientController {
 		return "list";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/form")
 	public String create(Map<String, Object> model) {
 
@@ -103,6 +127,7 @@ public class ClientController {
 		return "form";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/form")
 	public String save(@Valid @ModelAttribute("client") Client client, BindingResult result, Model model,
 			@RequestParam("file") MultipartFile photo, RedirectAttributes flash, SessionStatus status) {
@@ -135,6 +160,7 @@ public class ClientController {
 		return "redirect:list";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/form/{id}")
 	public String edit(@PathVariable("id") Long id, Model model, RedirectAttributes flash) {
 
@@ -154,6 +180,7 @@ public class ClientController {
 		return "form";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/delete/{id}")
 	public String delete(@PathVariable("id") Long id, RedirectAttributes flash) {
 
@@ -167,6 +194,37 @@ public class ClientController {
 		}
 
 		return "redirect:/list";
+	}
+	
+	
+	// this method is implemented inside SecurityContextHolderAwareRequestWrapper isUserInRole method (see list method of this class)
+	public boolean hasRole(String role) {
+		
+		SecurityContext context = SecurityContextHolder.getContext();
+		
+		if (context == null) {
+			return false;
+			
+		}
+		
+		Authentication auth = context.getAuthentication();
+		
+		if (auth == null) {
+			return false;
+		}
+		
+		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+		
+		/*
+		 * for (GrantedAuthority grantedAuthority : authorities) { if
+		 * (role.equals(grantedAuthority.getAuthority())) { return true; } } return
+		 * false;
+		 */
+		
+		return authorities.contains(new SimpleGrantedAuthority(role));
+		
+
+		
 	}
 
 }
