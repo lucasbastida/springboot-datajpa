@@ -12,7 +12,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class LoginController {
 
 	@GetMapping("/login")
-	public String login(@RequestParam(value = "error", required = false) String error, Model model, Principal principal,
+	public String login(@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "logout", required = false) String logout, Model model, Principal principal,
 			RedirectAttributes flash) {
 
 		System.out.println(principal);
@@ -20,11 +21,15 @@ public class LoginController {
 			flash.addFlashAttribute("info", "Already logged in.");
 			return "redirect:/";
 		}
-		
+
 		if (error != null) {
 			model.addAttribute("error", "Invalid username or Password");
 		}
 		
+		if (logout != null) {
+			model.addAttribute("success", "Logged out successfully.");
+		}
+
 		return "login";
 	}
 }

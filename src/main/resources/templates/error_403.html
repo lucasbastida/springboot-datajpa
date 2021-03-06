@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layouts/layout :: head"></head>
+<body>
+
+	<header th:replace="layouts/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-danger text-white">
+			<div class="card-header">Error: Access denied.</div>
+			<div class="card-body">
+			<h5 class="card-title"><span th:text="${#authentication.name}"></span> doesn't have access to this resource</h5>
+			<a th:href="@{/list}" class="btn btn-outline-light">Return home</a>
+			
+
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="layouts/layout :: footer"></footer>
+
+</body>
+</html>
